@@ -88,7 +88,7 @@ jobs:
             yq  '.spec.template.spec.containers[0].image' kubernetes/productcatalog/deploy.yaml
             yq e  '.spec.template.spec.containers[0].image = "${{ secrets.DOCKERHUB_USERNAME }}/product-catalogue-service:${{ github.run_id }}"' -i kubernetes/productcatalog/deploy.yaml
 
-    - name: commit-push
+    - name: commit-push-message
       run : |
           git config user.name "${{ vars.GEETHUB_USERNAME }}"
           git config user.email "${{ vars.GEETHUB_EMAIL }}"
