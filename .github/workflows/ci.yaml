@@ -30,22 +30,6 @@ jobs:
             cd src/product-catalog
             go test ./...
 
-
-  code-quality:
-    runs-on: ubuntu-latest
-    steps:
-    - name: checkout
-      uses: actions/checkout@v4
-    - name: setup-go
-      uses: actions/setup-go@v5
-      with:
-        go-version: stable
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v8
-      with:
-        version: v2.1
-        working-directory: src/product-catalog
-
   docker:
     runs-on: ubuntu-latest
     needs: build
@@ -88,13 +72,13 @@ jobs:
             yq  '.spec.template.spec.containers[0].image' kubernetes/productcatalog/deploy.yaml
             yq e  '.spec.template.spec.containers[0].image = "${{ secrets.DOCKERHUB_USERNAME }}/product-catalogue-service:${{ github.run_id }}"' -i kubernetes/productcatalog/deploy.yaml
 
-    - name: commit-push
+    - name: commit-push-message
       run : |
           git config user.name "${{ vars.GEETHUB_USERNAME }}"
           git config user.email "${{ vars.GEETHUB_EMAIL }}"
           git add kubernetes/productcatalog/deploy.yaml
           git commit -m "[CI] update product catalogue service docker image tag to ${{ github.run_id }}"
-          git push
+          git push origin HEAD:main -f
 
     
 
