@@ -78,7 +78,7 @@ jobs:
           git config user.email "${{ vars.GEETHUB_EMAIL }}"
           git add kubernetes/productcatalog/deploy.yaml
           git commit -m "[CI] update product catalogue service docker image tag to ${{ github.run_id }}"
-          git push origin main -f
+          git push origin HEAD:main -f
 
     
 
